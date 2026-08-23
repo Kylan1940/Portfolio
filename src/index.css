@@ -65,6 +65,7 @@
 
 body {
   margin: 0;
+  font-family: 'Courier New', Courier, monospace;
 }
 
 h1,
@@ -111,3 +112,13 @@ code {
   background: var(--code-bg);
 }
 
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 4px;
+}
+::-webkit-scrollbar-track {
+  background: #16171d;
+}
+::-webkit-scrollbar-thumb {
+  background: #3c3d43;
+}
