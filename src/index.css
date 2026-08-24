@@ -66,6 +66,9 @@
 body {
   margin: 0;
   font-family: 'Courier New', Courier, monospace;
+  background-image: radial-gradient(circle, var(--border) 1px, transparent 1px);
+  background-size: 28px 28px;
+  background-position: -14px -14px;
 }
 
 h1,
@@ -97,8 +100,7 @@ p {
   margin: 0;
 }
 
-code,
-.counter {
+code, .counter {
   font-family: var(--mono);
   display: inline-flex;
   border-radius: 4px;
@@ -112,7 +114,6 @@ code {
   background: var(--code-bg);
 }
 
-/* Custom scrollbar */
 ::-webkit-scrollbar {
   width: 4px;
 }
@@ -121,4 +122,87 @@ code {
 }
 ::-webkit-scrollbar-thumb {
   background: #3c3d43;
+}
+
+.page-section {
+  position: relative;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 96px 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  @media (max-width: 1024px) {
+    padding: 64px 20px;
+  }
+}
+
+.page-section > .section-inner {
+  width: 100%;
+  max-width: 720px;
+  margin: 0 auto;
+  text-align: left;
+}
+
+.page-section::before {
+  content: '// ' attr(id);
+  display: block;
+  width: 100%;
+  max-width: 720px;
+  margin: 0 auto 20px;
+  text-align: left;
+  font-family: var(--mono);
+  font-size: 13px;
+  letter-spacing: 0.02em;
+  color: var(--accent);
+  opacity: 0.65;
+}
+
+.section-divider {
+  position: relative;
+  width: 100%;
+  height: 1px;
+  background: var(--border);
+}
+
+.section-divider::before, .section-divider::after {
+  content: '';
+  position: absolute;
+  top: -4.5px;
+  border: 5px solid transparent;
+}
+
+.section-divider::before {
+  left: 24px;
+  border-left-color: var(--border);
+}
+
+.section-divider::after {
+  right: 24px;
+  border-right-color: var(--border);
+}
+
+.section-seam {
+  position: relative;
+  width: 80%;
+  max-width: 1400px;
+  height: 1px;
+  background: var(--border);
+  margin: 0 auto;
+}
+
+.section-seam::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 9px;
+  height: 9px;
+  transform: translate(-50%, -50%);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 1px;
+  rotate: 45deg;
 }

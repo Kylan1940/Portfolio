@@ -1,15 +1,41 @@
+import { useState } from 'react';
+import { about } from '../lib/data'
+
 export function About() {
+    const [activeTab, setActiveTab] = useState(0)
+    const focus = about.currentFocus[activeTab]
+
     return (
-    <section id="about" className="min-h-screen w-full flex flex-colpx-6">
-        <div className="px-5">
-            <h1></h1>
+    <section id="about" className="page-section">
+        <div className="section-inner">
 
-            <div>
-                <p></p>
+            <div className="space-y-4">
+                {about.paragraphs.map((p, i) => (
+                    <p key={i} className='text-neutral-400 text-base leading-relaxed'>{p}</p>
+                ))}
             </div>
 
-            <div>
+            <div className="focus-block">
+                <h2>Currently focused on:</h2>
+                <div className="focus-tabs" role='tablist' aria-label="Currentlu focused on">
+                    {about.currentFocus.map((item, i) => (
+                        <button
+                            key={item.language}
+                            type="button"
+                            role="tab"
+                            aria-selected={activeTab === i}
+                            className={`focus-tab${activeTab === i ? ' active' : ''}`}
+                            onClick={() => setActiveTab(i)}
+                        >
+                            {item.language}
+                        </button>
+                    ))}
+                </div>
+                <div className="focus-panel" role="tabpanel">
+                    <p>{focus.description}</p>
+                </div>
             </div>
+
         </div>
     </section>
   );

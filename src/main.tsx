@@ -9,7 +9,7 @@ import { Projects } from './components/Projects.tsx'
 import { Certificates } from './components/Certificates.tsx'
 import { Contact } from './components/Contact.tsx'
 import './index.css'
-import './App.css'
+import './section.css'
 
 createRoot(document.getElementById('root')!).render(
   <main>
@@ -17,9 +17,9 @@ createRoot(document.getElementById('root')!).render(
     <Divider />
     <About />
     <Label />
-    <Skills />
-    <Label />
     <Experience />
+    <Label />
+    <Skills />
     <Label />
     <Projects />
     <Label />

@@ -19,7 +19,7 @@ export function Hero() {
                     }}
                     className="cta reveal mt-6"
                 >
-                    What's there?
+                    What's Inside?
                     <svg viewBox="0 0 14 14" fill="none" xmlns="https://www.w3.org/2000/svg" aria-hidden="true">
                         <path d="M7 2v9M3 7.5 7 11l4-3.5" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>
