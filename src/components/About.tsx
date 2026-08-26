@@ -9,11 +9,22 @@ export function About() {
     <section id="about" className="page-section">
         <div className="section-inner">
 
+            <p className="hello-world">Hello World!</p>
+
             <div className="space-y-4">
                 {about.paragraphs.map((p, i) => (
                     <p key={i} className='text-neutral-400 text-base leading-relaxed'>{p}</p>
                 ))}
             </div>
+
+            <dl className="intro-grid">
+                {about.intro.map((item) => (
+                    <div key={item.label} className="intro-row">
+                        <dt>{item.label}</dt>
+                        <dd>{item.value}</dd>
+                    </div>
+                ))}
+            </dl>
 
             <div className="focus-block">
                 <h2>Currently focused on:</h2>
