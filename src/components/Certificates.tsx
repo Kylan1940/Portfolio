@@ -160,26 +160,26 @@ export function Certificates() {
                             )
                         })}
                     </div>
-                    {filtered.length > 0 ? (
-                        <div className="cert-list">
-                            {filtered.map((cert) => (
-                                <CertRow key={cert.id} cert={cert} />
-                            ))}
-                        </div>
-                    ) : (
-                        <p className="cert-status">
-                            {hasActiveFilters ? "No certificates match your search or filter." : "No certificates found."}
-                        </p>
-                    )}
-
-                    <div className="cert-footer">
-                        <span className="cert-footer-count">
-                            {filtered.length === certificates.length ? `${certificates.length} certificates` : `${filtered.length} of {certificates.length} certificates`}
-                        </span>
-                        {hasActiveFilters && (
-                            <button type="button" className="cert-clear" onClick={clearFilters}>Clear Filters</button>
-                        )}
+                </div>
+                {filtered.length > 0 ? (
+                    <div className="cert-list">
+                        {filtered.map((cert) => (
+                            <CertRow key={cert.id} cert={cert} />
+                        ))}
                     </div>
+                ) : (
+                    <p className="cert-status">
+                        {hasActiveFilters ? "No certificates match your search or filter." : "No certificates found."}
+                    </p>
+                )}
+
+                <div className="cert-footer">
+                    <span className="cert-footer-count">
+                        {filtered.length === certificates.length ? `${certificates.length} certificates` : `${filtered.length} of ${certificates.length} certificates`}
+                    </span>
+                    {hasActiveFilters && (
+                        <button type="button" className="cert-clear" onClick={clearFilters}>Clear Filters</button>
+                    )}
                 </div>
             </div>
         </section>

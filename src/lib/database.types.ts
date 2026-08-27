@@ -15,3 +15,16 @@ export interface Certificate {
     issue_date: string | null
     created_at: string
 }
+
+export type ProjectStatus = "Live" | "In Progress" | "Planned" | "Archived"
+
+export interface Project {
+    id: string
+    name: string
+    description: string
+    stack: string[]
+    github: string | null
+    demo: string | null
+    status: ProjectStatus
+    featured?: boolean
+}

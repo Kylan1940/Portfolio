@@ -1,4 +1,4 @@
-import type { Certificate } from "./database.types";
+import type { Certificate, Project } from "./database.types";
 
 export const siteConfig = {
   name: "Valerian Kevin Casendra",
@@ -36,6 +36,21 @@ export const about = {
     }
   ]
 }
+
+export const skills = [
+  {
+    title: "Development",
+    items: ["HTML/CSS", "JavaScript", "TypeScript", "Next.js & React", "Tailwind CSS", "Java"]
+  },
+  {
+    title: "Tools & Workflow",
+    items: ["Git", "Github", "VS Code", "IntelliJ IDEA", "Langflow", "Supabase"]
+  },
+  {
+    title: "Other Skills",
+    items: ["Discord Bot Development", "Community Management", "Team Coordination", "Problem Solving"]
+  },
+]
 
 export const experience = [
   {
@@ -125,6 +140,109 @@ export const certificates: Certificate[] = [
     category: "Workshop",
     issue_date: "2026-07-22",
     created_at: "2026-07-22"
+  },
+]
+
+export const projects: Project[] = [
+  {
+    id: "proj-1",
+    name: "Kylan1940 Official Website",
+    description: "This website. Designed and built from scratch with Next.js, TypeScript, and Tailwind CSS. Focused on clarity, honest content, and a layout that doesn't feel generated.",
+    stack: ["HTML", "CSS", "JavaScript", "Next.js", "React", "TypeScript", "TailwindCSS", "Supabase"],
+    github: null,
+    demo: "https://kylan1940.web.id",
+    status: "Live",
+    featured: true,
+  },
+  {
+    id: "proj-2",
+    name: "GoogleMapsAI",
+    description: "An AI-powered place discovery platform that helps users find and explore any locations using natural language.",
+    stack: ["React", "TypeScript", "GoogleMaps AI"],
+    github: "https://github.com/Kylan1940/GoogleMapsAI",
+    demo: "https://google-maps-ai.vercel.app",
+    status: "Live",
+    featured: false,
+  },
+  {
+    id: "proj-3",
+    name: "BMKG Discord Bot",
+    description: "A Discord bot that fetches and delivers earthquake alerts from Indonesia's national meteorology agency (BMKG). Built to give communities quick access to critical local information without leaving Discord.",
+    stack: ["JavaScript", "Discord.js"],
+    github: "https://github.com/Kylan1940/BMKG-Discord-Bot",
+    demo: null,
+    status: "Live",
+    featured: false,
+  },
+  {
+    id: "proj-4",
+    name: "HealAndFeed",
+    description: "Heal and Feed Commands for Minecraft Java Server",
+    stack: ["Java"],
+    github: "https://github.com/Kylan1940/HealAndFeed",
+    demo: null,
+    status: "Live",
+    featured: false,
+  },
+  {
+    id: "proj-5",
+    name: "ServerTimeline",
+    description: "Records, stores, and displays Minecraft Java Server events such as player activity, block changes, and entity kills.",
+    stack: ["Java"],
+    github: "https://github.com/Kylan1940/ServerTimeline",
+    demo: null,
+    status: "Live",
+    featured: false,
+  },
+  {
+    id: "proj-6",
+    name: "Linock Bot",
+    description: "A utility Discord bot built for server management and automation. Handles moderation workflows, custom commands, and routine tasks to reduce manual work for server administrators.",
+    stack: ["JavaScript", "Discord.js"],
+    github: "https://github.com/Kylan1940/LinockBot-Discord",
+    demo: null,
+    status: "In Progress",
+    featured: false,
+  },
+  {
+    id: "proj-7",
+    name: "PMMP-HealAndFeed",
+    description: "Heal and Feed Command for PocketMine-MP",
+    stack: ["PHP"],
+    github: "https://github.com/Kylan1940/PMMP-HealAndFeed",
+    demo: null,
+    status: "Archived",
+    featured: false,
+  },
+  {
+    id: "proj-8",
+    name: "PMMP-OnlineUI",
+    description: "Check who are in the server with UI, for PocketMine-MP",
+    stack: ["PHP"],
+    github: "https://github.com/Kylan1940/OnlineUI",
+    demo: null,
+    status: "Archived",
+    featured: false,
+  },
+  {
+    id: "proj-9",
+    name: "PMMP-HeadsOrTails",
+    description: "Guess! Heads or Tails! for PocketMine-MP",
+    stack: ["PHP"],
+    github: "https://github.com/Kylan1940/HeadsOrTails",
+    demo: null,
+    status: "Archived",
+    featured: false,
+  },
+  {
+    id: "proj-10",
+    name: "PMMP-WhitelistKick",
+    description: "Kick all players when whitelist on, for PocketMine-MP",
+    stack: ["PHP"],
+    github: "https://github.com/Kylan1940/WhitelistKick",
+    demo: null,
+    status: "Archived",
+    featured: false,
   },
 ]
 
