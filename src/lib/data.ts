@@ -8,8 +8,8 @@ export const siteConfig = {
 export const about = {
   intro: [
     { label: "Name", value: "Valerian Kevin Casendra" },
-    { label: "Education", value: "Bachelor of Computer Science, Universitas Dian Nuswantoro" },
-    { label: "Location", value: "Semarang City, Indonesia" }
+    { label: "Education", value: "Bachelor of Informatics Engineering, Universitas Dian Nuswantoro" },
+    { label: "Location", value: "Semarang, Central Java, Indonesia" }
   ],
   paragraphs: [
     "I'm an Informatics Engineering student with hands-on experience in web development and software development. I primarily work with React, Next.js, TypeScript, Java, and JavaScript, while also having experience with backend development, server administration, and Minecraft server technologies. I enjoy working on projects where I can build something from the ground up, solve practical problems, and learn from the process rather than simply following an existing solution.",

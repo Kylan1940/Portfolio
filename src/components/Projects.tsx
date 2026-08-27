@@ -86,6 +86,7 @@ export function Projects() {
                 <p className="text-neutral-400 text-base leading-relaxed max-w-md mb-8">
                     A mix of things I've shipped, maintained, or am still actively building. This list keeps growing as I build more.
                 </p>
+                <br />
 
                 <div className="project-slider" onMouseEnter={() => setPaused(true)} onMouseLeave={() => setPaused(false)}>
                     <button type="button" className="slider-arrow slider-arrow-left" onClick={goPrev} aria-label="Previous project">
