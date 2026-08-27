@@ -8,7 +8,7 @@ export const siteConfig = {
 export const about = {
   intro: [
     { label: "Name", value: "Valerian Kevin Casendra" },
-    { label: "Education", value: "Bachelor of Informatics Engineering, Universitas Dian Nuswantoro" },
+    { label: "Education", value: "Bachelor of Computer Science, Universitas Dian Nuswantoro" },
     { label: "Location", value: "Semarang City, Indonesia" }
   ],
   paragraphs: [
