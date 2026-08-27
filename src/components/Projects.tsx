@@ -15,7 +15,7 @@ const STATUS_CLASS: Record<ProjectStatus, string> = {
 function ProjectCard({ project }: { project: Project }) {
     return (
         <div className="project-card">
-            {project.featured && <span className="project-freature-badge">Featured</span>}
+            {project.featured && <span className="project-featured-badge">Featured</span>}
 
             <div className="project-card-header">
                 <h3>{project.name}</h3>
