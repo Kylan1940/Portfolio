@@ -1,9 +1,10 @@
-import { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import type { Project, ProjectStatus } from "../lib/database.types";
 import { projects as projectsData } from "../lib/data";
 
 const SLIDE_DURATION = 5000
 const PEEK_GAP = 20
+const SWIPE_THRESHOLD = 40
 
 const STATUS_CLASS: Record<ProjectStatus, string> = {
     Live: "is-live",
@@ -70,6 +71,30 @@ export function Projects() {
     const goNext = useCallback(() => goTo(index + 1) , [goTo, index])
     const goPrev = useCallback(() => goTo(index - 1) , [goTo, index])
 
+    const touchStartX = useRef<number | null>(null)
+    const touchDeltaX = useRef(0)
+
+    const handleTouchStart = useCallback((e: React.TouchEvent) => {
+        touchStartX.current = e.touches[0].clientX
+        touchDeltaX.current = 0
+        setPaused(true)
+    }, [])
+
+    const handleTouchMove = useCallback((e: React.TouchEvent) => {
+        if(touchStartX.current === null) return
+        touchDeltaX.current = e.touches[0].clientX - touchStartX.current
+    }, [])
+
+    const handleTouchEnd = useCallback(() => {
+        if(Math.abs(touchDeltaX.current) > SWIPE_THRESHOLD) {
+            if(touchDeltaX.current < 0) goNext()
+            else goPrev()
+        }
+        touchStartX.current = null
+        touchDeltaX.current = 0
+        setPaused(false)
+    }, [goNext, goPrev])
+
     useEffect(() => {
         if (paused || total <= 1) return
 
@@ -88,7 +113,7 @@ export function Projects() {
                 </p>
                 <br />
 
-                <div className="project-slider" onMouseEnter={() => setPaused(true)} onMouseLeave={() => setPaused(false)}>
+                <div className="project-slider" onMouseEnter={() => setPaused(true)} onMouseLeave={() => setPaused(false)} onTouchStart={handleTouchStart} onTouchMove={handleTouchMove} onTouchEnd={handleTouchEnd}>
                     <button type="button" className="slider-arrow slider-arrow-left" onClick={goPrev} aria-label="Previous project">
                         <svg viewBox="0 0 20 20" fill="none" aria-hidden="true">
                             <path d="M12.5 4.5 6.5 10l6 5.5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
