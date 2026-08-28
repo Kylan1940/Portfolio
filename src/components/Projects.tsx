@@ -8,7 +8,7 @@ const SWIPE_THRESHOLD = 40
 
 const STATUS_CLASS: Record<ProjectStatus, string> = {
     Live: "is-live",
-    "In Progress": "is-progess",
+    "In Progress": "is-progress",
     Planned: "is-planned",
     Archived: "is-archived"
 }
