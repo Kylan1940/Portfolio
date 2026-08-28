@@ -3,6 +3,7 @@ import type { Project, ProjectStatus } from "../lib/database.types";
 import { projects as projectsData } from "../lib/data";
 
 const SLIDE_DURATION = 5000
+const FIRST_ADVANCE_DELAY = 500
 const PEEK_GAP = 20
 const SWIPE_THRESHOLD = 40
 
@@ -64,6 +65,10 @@ export function Projects() {
 
     const [index, setIndex] = useState(0)
     const [paused, setPaused] = useState(false)
+    const [inView, setInView] = useState(false)
+    const [readyToAdvance, setReadyToAdvance] = useState(false)
+    const sliderRef = useRef<HTMLDivElement | null>(null)
+    const enterTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
     const goTo = useCallback(
         (next: number) => setIndex(((next % total) + total) % total), [total]
@@ -96,14 +101,43 @@ export function Projects() {
     }, [goNext, goPrev])
 
     useEffect(() => {
-        if (paused || total <= 1) return
+        const el = sliderRef.current
+        if(!el) return
+
+        const observer = new IntersectionObserver (
+            ([entry]) => {
+                if (enterTimeoutRef.current) clearTimeout(enterTimeoutRef.current)
+                
+                if(entry.isIntersecting) {
+                    setInView(true)
+                    setIndex(0)
+                    setReadyToAdvance(false)
+                    enterTimeoutRef.current = setTimeout(() => {
+                        setReadyToAdvance(true)
+                    }, FIRST_ADVANCE_DELAY)
+                } else {
+                    setInView(false)
+                    setReadyToAdvance(false)
+                }
+            },
+            {threshold: 0.4}
+        )
+        observer.observe(el)
+        return () => {
+            observer.disconnect
+            if (enterTimeoutRef.current) clearTimeout(enterTimeoutRef.current)
+        }
+    }, [])
+
+    useEffect(() => {
+        if (paused || !inView || !readyToAdvance || total <= 1) return
 
         const timer = setInterval(() => {
             setIndex((prev) => (prev + 1) % total)
         }, SLIDE_DURATION)
 
         return () => clearInterval(timer)
-    }, [paused, total, index])
+    }, [paused, inView, readyToAdvance, total, index])
 
     return (
         <section id="projects" className="page-section">
@@ -153,6 +187,7 @@ export function Projects() {
                         </svg>
                     </button>
                 </div>
+                <span className="slider-counter">{index + 1} / {total}</span>
             </div>
         </section>
     )
