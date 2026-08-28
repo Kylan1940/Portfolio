@@ -141,6 +141,14 @@ export const certificates: Certificate[] = [
     issue_date: "2026-07-22",
     created_at: "2026-07-22"
   },
+  {
+    id: "cert-8",
+    title: "Quality Assurance Dibimbing",
+    provider: "Dibimbing",
+    category: "Webinar",
+    issue_date: "2026-08-26",
+    created_at: "2026-08-26"
+  },
 ]
 
 export const projects: Project[] = [
