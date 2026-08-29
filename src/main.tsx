@@ -10,9 +10,11 @@ import { Certificates } from './components/Certificates.tsx'
 import { Contact } from './components/Contact.tsx'
 import './index.css'
 import './section.css'
+// import { Header } from './components/Header.tsx'
 
 createRoot(document.getElementById('root')!).render(
   <main>
+    {/* <Header /> */}
     <Hero />
     <Divider />
     <About />

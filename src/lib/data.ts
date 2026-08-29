@@ -149,6 +149,14 @@ export const certificates: Certificate[] = [
     issue_date: "2026-08-26",
     created_at: "2026-08-26"
   },
+  {
+    id: "cert-9",
+    title: "Agentic AI: The Next AI Revolution",
+    provider: "Aijen",
+    category: "Webinar",
+    issue_date: "2026-08-29",
+    created_at: "2026-08-29"
+  },
 ]
 
 export const projects: Project[] = [
