@@ -1,4 +1,5 @@
 import { Resend } from "resend";
+import type { VercelRequest, VercelResponse } from "@vercel/node";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -9,38 +10,24 @@ interface ContactRequest {
     message: string;
 }
 
-export default async function handler(req: Request) {
+export default async function handler(
+    req: VercelRequest,
+    res: VercelResponse
+) {
     if (req.method !== "POST") {
-        return new Response(
-            JSON.stringify({
-                message: "Method not allowed",
-            }),
-            {
-                status: 405,
-                headers: {
-                    "Content-Type": "application/json",
-                },
-            }
-        );
+        return res.status(405).json({
+            message: "Method not allowed",
+        });
     }
 
     try {
-        const body = (await req.json()) as ContactRequest;
-
-        const { name, email, subject, message } = body;
+        const { name, email, subject, message } =
+            req.body as ContactRequest;
 
         if (!name || !email || !subject || !message) {
-            return new Response(
-                JSON.stringify({
-                    message: "All fields are required",
-                }),
-                {
-                    status: 400,
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                }
-            );
+            return res.status(400).json({
+                message: "All fields are required",
+            });
         }
 
         const { error } = await resend.emails.send({
@@ -59,43 +46,19 @@ export default async function handler(req: Request) {
         if (error) {
             console.error("Resend error:", error);
 
-            return new Response(
-                JSON.stringify({
-                    message: "Failed to send email",
-                }),
-                {
-                    status: 500,
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                }
-            );
+            return res.status(500).json({
+                message: "Failed to send email",
+            });
         }
 
-        return new Response(
-            JSON.stringify({
-                message: "Email sent successfully",
-            }),
-            {
-                status: 200,
-                headers: {
-                    "Content-Type": "application/json",
-                },
-            }
-        );
+        return res.status(200).json({
+            message: "Email sent successfully",
+        });
     } catch (error) {
         console.error("Contact API error:", error);
 
-        return new Response(
-            JSON.stringify({
-                message: "Internal server error",
-            }),
-            {
-                status: 500,
-                headers: {
-                    "Content-Type": "application/json",
-                },
-            }
-        );
+        return res.status(500).json({
+            message: "Internal server error",
+        });
     }
 }
