@@ -233,6 +233,183 @@
     line-height: 145%;
 }
 
+/* GitHub Contributions */
+.contribution-block {
+    margin-top: 64px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+}
+
+.contribution-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 32px;
+    margin-bottom: 24px;
+}
+
+.contribution-label {
+    display: block;
+    margin-bottom: 6px;
+
+    font-family: var(--mono);
+    font-size: 11px;
+    line-height: 1;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+
+    color: var(--text);
+    opacity: 0.5;
+}
+
+.contribution-title {
+    color: var(--text-h);
+    font-family: var(--mono);
+    font-size: 14px;
+}
+
+.contribution-years {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 4px;
+}
+
+.contribution-year {
+    border: 0;
+    padding: 4px 7px;
+
+    background: transparent;
+
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text);
+
+    opacity: 0.45;
+    cursor: pointer;
+
+    transition:
+        color 0.2s ease,
+        opacity 0.2s ease;
+}
+
+.contribution-year:hover {
+    color: var(--accent);
+    opacity: 1;
+}
+
+.contribution-year.active {
+    color: var(--accent);
+    opacity: 1;
+}
+
+.contribution-summary {
+    margin-bottom: 12px;
+
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text);
+
+    opacity: 0.5;
+}
+
+.contribution-scroll {
+    width: 100%;
+    overflow-x: auto;
+    padding-bottom: 6px;
+}
+
+.contribution-graph {
+    display: flex;
+    gap: 3px;
+    width: max-content;
+}
+
+.contribution-week {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.contribution-cell,
+.legend-cell {
+    width: 11px;
+    height: 11px;
+    flex: none;
+
+    border: 1px solid var(--border);
+    box-sizing: border-box;
+
+    background: transparent;
+}
+
+.contribution-cell.level-1,
+.legend-cell.level-1 {
+    background: color-mix(in srgb,
+            var(--accent) 25%,
+            transparent);
+}
+
+.contribution-cell.level-2,
+.legend-cell.level-2 {
+    background: color-mix(in srgb,
+            var(--accent) 45%,
+            transparent);
+}
+
+.contribution-cell.level-3,
+.legend-cell.level-3 {
+    background: color-mix(in srgb,
+            var(--accent) 70%,
+            transparent);
+}
+
+.contribution-cell.level-4,
+.legend-cell.level-4 {
+    background: var(--accent);
+}
+
+.contribution-legend {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 4px;
+
+    margin-top: 10px;
+
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--text);
+    opacity: 0.45;
+}
+
+.contribution-state {
+    padding: 32px 0;
+
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--text);
+
+    opacity: 0.5;
+}
+
+@media (max-width: 1024px) {
+    .contribution-header {
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .contribution-years {
+        justify-content: flex-start;
+    }
+
+    .contribution-cell,
+    .legend-cell {
+        width: 10px;
+        height: 10px;
+    }
+}
+
 /* skills */
 .skills-grid {
     display: grid;
@@ -621,6 +798,7 @@
         width: 80%;
         max-width: none;
     }
+
     .project-viewport {
         -webkit-mask-image: linear-gradient(90deg, transparent 0%, black 6%, black 94%, transparent 100%);
         mask-image: linear-gradient(90deg, transparent 0%, black 6%, black 94%, transparent 100%);

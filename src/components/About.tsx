@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { about } from '../lib/data'
+import { ContributionGraph } from "./GitHubContributions";
 
 export function About() {
     const [activeTab, setActiveTab] = useState(0)
@@ -46,6 +47,7 @@ export function About() {
                     <p>{focus.description}</p>
                 </div>
             </div>
+            <ContributionGraph />
 
         </div>
     </section>
