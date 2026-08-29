@@ -10,7 +10,7 @@ export function Contact() {
         const formData = new FormData(form);
         setStatus("sending");
         try {
-            const response = await fetch("/app/contact", {
+            const response = await fetch("/api/contact", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
