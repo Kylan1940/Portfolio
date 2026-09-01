@@ -1,4 +1,4 @@
-import type { Certificate, Project } from "./database.types";
+// import type { Certificate, Project } from "./database.types";
 
 export const siteConfig = {
   name: "Valerian Kevin Casendra",
@@ -84,183 +84,193 @@ export const experience = [
   }
 ]
 
-export const certificates: Certificate[] = [
-  {
-    id: "cert-1",
-    title: "Intro to Software Engineering",
-    provider: "RevoU",
-    category: "Mini Course",
-    issue_date: "2025-10-17",
-    created_at: "2025-10-17"
-  },
-  {
-    id: "cert-2",
-    title: "User, Integrator, or Creator: Your Place in the AI Ecosystem",
-    provider: "Dicoding",
-    category: "Webinar",
-    issue_date: "2025-10-02",
-    created_at: "2025-10-02"
-  },
-  {
-    id: "cert-3",
-    title: "Understanding Redux Fundamentals before Using RTK",
-    provider: "Dicoding",
-    category: "Webinar",
-    issue_date: "2025-10-03",
-    created_at: "2025-10-03"
-  },
-  {
-    id: "cert-4",
-    title: "Understanding Data through Probability and Statistics",
-    provider: "Dicoding",
-    category: "Webinar",
-    issue_date: "2025-10-10",
-    created_at: "2025-10-10"
-  },
-  {
-    id: "cert-5",
-    title: "Workshop React JS Creating My Own Digital Invitations",
-    provider: "Dunia Coding",
-    category: "Workshop",
-    issue_date: "2025-10-11",
-    created_at: "2025-10-11"
-  },
-  {
-    id: "cert-6",
-    title: "Linux for Cyber Security",
-    provider: "Dunia Coding",
-    category: "Webinar",
-    issue_date: "2026-06-03",
-    created_at: "2026-06-03"
-  },
-  {
-    id: "cert-7",
-    title: "IT - AI Agent for Programming",
-    provider: "Hacktiv8",
-    category: "Workshop",
-    issue_date: "2026-07-22",
-    created_at: "2026-07-22"
-  },
-  {
-    id: "cert-8",
-    title: "Quality Assurance Dibimbing",
-    provider: "Dibimbing",
-    category: "Webinar",
-    issue_date: "2026-08-26",
-    created_at: "2026-08-26"
-  },
-  {
-    id: "cert-9",
-    title: "Agentic AI: The Next AI Revolution",
-    provider: "Aijen",
-    category: "Webinar",
-    issue_date: "2026-08-29",
-    created_at: "2026-08-29"
-  },
-]
+// export const certificates: Certificate[] = [
+//   {
+//     id: "cert-1",
+//     title: "Intro to Software Engineering",
+//     provider: "RevoU",
+//     category: "Mini Course",
+//     issue_date: "2025-10-17",
+//     created_at: "2025-10-17"
+//   },
+//   {
+//     id: "cert-2",
+//     title: "User, Integrator, or Creator: Your Place in the AI Ecosystem",
+//     provider: "Dicoding",
+//     category: "Webinar",
+//     issue_date: "2025-10-02",
+//     created_at: "2025-10-02"
+//   },
+//   {
+//     id: "cert-3",
+//     title: "Understanding Redux Fundamentals before Using RTK",
+//     provider: "Dicoding",
+//     category: "Webinar",
+//     issue_date: "2025-10-03",
+//     created_at: "2025-10-03"
+//   },
+//   {
+//     id: "cert-4",
+//     title: "Understanding Data through Probability and Statistics",
+//     provider: "Dicoding",
+//     category: "Webinar",
+//     issue_date: "2025-10-10",
+//     created_at: "2025-10-10"
+//   },
+//   {
+//     id: "cert-5",
+//     title: "Workshop React JS Creating My Own Digital Invitations",
+//     provider: "Dunia Coding",
+//     category: "Workshop",
+//     issue_date: "2025-10-11",
+//     created_at: "2025-10-11"
+//   },
+//   {
+//     id: "cert-6",
+//     title: "Linux for Cyber Security",
+//     provider: "Dunia Coding",
+//     category: "Webinar",
+//     issue_date: "2026-06-03",
+//     created_at: "2026-06-03"
+//   },
+//   {
+//     id: "cert-7",
+//     title: "IT - AI Agent for Programming",
+//     provider: "Hacktiv8",
+//     category: "Workshop",
+//     issue_date: "2026-07-22",
+//     created_at: "2026-07-22"
+//   },
+//   {
+//     id: "cert-8",
+//     title: "Quality Assurance Dibimbing",
+//     provider: "Dibimbing",
+//     category: "Webinar",
+//     issue_date: "2026-08-26",
+//     created_at: "2026-08-26"
+//   },
+//   {
+//     id: "cert-9",
+//     title: "Agentic AI: The Next AI Revolution",
+//     provider: "Aijen",
+//     category: "Webinar",
+//     issue_date: "2026-08-29",
+//     created_at: "2026-08-29"
+//   },
+// ]
 
-export const projects: Project[] = [
-  {
-    id: "proj-1",
-    name: "Kylan1940 Official Website",
-    description: "This website. Designed and built from scratch with Next.js, TypeScript, and Tailwind CSS. Focused on clarity, honest content, and a layout that doesn't feel generated.",
-    stack: ["HTML", "CSS", "JavaScript", "Next.js", "React", "TypeScript", "TailwindCSS", "Supabase"],
-    github: null,
-    demo: "https://kylan1940.web.id",
-    status: "Live",
-    featured: true,
-  },
-  {
-    id: "proj-2",
-    name: "GoogleMapsAI",
-    description: "An AI-powered place discovery platform that helps users find and explore any locations using natural language.",
-    stack: ["React", "TypeScript", "GoogleMaps AI"],
-    github: "https://github.com/Kylan1940/GoogleMapsAI",
-    demo: "https://google-maps-ai.vercel.app",
-    status: "Live",
-    featured: false,
-  },
-  {
-    id: "proj-3",
-    name: "BMKG Discord Bot",
-    description: "A Discord bot that fetches and delivers earthquake alerts from Indonesia's national meteorology agency (BMKG). Built to give communities quick access to critical local information without leaving Discord.",
-    stack: ["JavaScript", "Discord.js"],
-    github: "https://github.com/Kylan1940/BMKG-Discord-Bot",
-    demo: null,
-    status: "Live",
-    featured: false,
-  },
-  {
-    id: "proj-4",
-    name: "HealAndFeed",
-    description: "Heal and Feed Commands for Minecraft Java Server",
-    stack: ["Java"],
-    github: "https://github.com/Kylan1940/HealAndFeed",
-    demo: null,
-    status: "Live",
-    featured: false,
-  },
-  {
-    id: "proj-5",
-    name: "ServerTimeline",
-    description: "Records, stores, and displays Minecraft Java Server events such as player activity, block changes, and entity kills.",
-    stack: ["Java"],
-    github: "https://github.com/Kylan1940/ServerTimeline",
-    demo: null,
-    status: "Live",
-    featured: false,
-  },
-  {
-    id: "proj-6",
-    name: "Linock Bot",
-    description: "A utility Discord bot built for server management and automation. Handles moderation workflows, custom commands, and routine tasks to reduce manual work for server administrators.",
-    stack: ["JavaScript", "Discord.js"],
-    github: "https://github.com/Kylan1940/LinockBot-Discord",
-    demo: null,
-    status: "In Progress",
-    featured: false,
-  },
-  {
-    id: "proj-7",
-    name: "PMMP-HealAndFeed",
-    description: "Heal and Feed Command for PocketMine-MP",
-    stack: ["PHP"],
-    github: "https://github.com/Kylan1940/PMMP-HealAndFeed",
-    demo: null,
-    status: "Archived",
-    featured: false,
-  },
-  {
-    id: "proj-8",
-    name: "PMMP-OnlineUI",
-    description: "Check who are in the server with UI, for PocketMine-MP",
-    stack: ["PHP"],
-    github: "https://github.com/Kylan1940/OnlineUI",
-    demo: null,
-    status: "Archived",
-    featured: false,
-  },
-  {
-    id: "proj-9",
-    name: "PMMP-HeadsOrTails",
-    description: "Guess! Heads or Tails! for PocketMine-MP",
-    stack: ["PHP"],
-    github: "https://github.com/Kylan1940/HeadsOrTails",
-    demo: null,
-    status: "Archived",
-    featured: false,
-  },
-  {
-    id: "proj-10",
-    name: "PMMP-WhitelistKick",
-    description: "Kick all players when whitelist on, for PocketMine-MP",
-    stack: ["PHP"],
-    github: "https://github.com/Kylan1940/WhitelistKick",
-    demo: null,
-    status: "Archived",
-    featured: false,
-  },
-]
+// export const projects: Project[] = [
+//   {
+//     id: "proj-1",
+//     name: "Kylan1940 Official Website",
+//     description: "This website. Designed and built from scratch with Next.js, TypeScript, and Tailwind CSS. Focused on clarity, honest content, and a layout that doesn't feel generated.",
+//     stack: ["HTML", "CSS", "JavaScript", "Next.js", "React", "TypeScript", "TailwindCSS", "Supabase"],
+//     github: null,
+//     demo: "https://kylan1940.web.id",
+//     status: "Live",
+//     featured: true,
+//   },
+//   {
+//     id: "proj-2",
+//     name: "GoogleMapsAI",
+//     description: "An AI-powered place discovery platform that helps users find and explore any locations using natural language.",
+//     stack: ["React", "TypeScript", "GoogleMaps AI"],
+//     github: "https://github.com/Kylan1940/GoogleMapsAI",
+//     demo: "https://google-maps-ai.vercel.app",
+//     status: "Live",
+//     featured: false,
+//   },
+//   {
+//     id: "proj-3",
+//     name: "BMKG Discord Bot",
+//     description: "A Discord bot that fetches and delivers earthquake alerts from Indonesia's national meteorology agency (BMKG). Built to give communities quick access to critical local information without leaving Discord.",
+//     stack: ["JavaScript", "Discord.js"],
+//     github: "https://github.com/Kylan1940/BMKG-Discord-Bot",
+//     demo: null,
+//     status: "Live",
+//     featured: false,
+//   },
+//   {
+//     id: "proj-4",
+//     name: "HealAndFeed",
+//     description: "Heal and Feed Commands for Minecraft Java Server",
+//     stack: ["Java"],
+//     github: "https://github.com/Kylan1940/HealAndFeed",
+//     demo: null,
+//     status: "Live",
+//     featured: false,
+//   },
+//   {
+//     id: "proj-5",
+//     name: "ServerTimeline",
+//     description: "Records, stores, and displays Minecraft Java Server events such as player activity, block changes, and entity kills.",
+//     stack: ["Java"],
+//     github: "https://github.com/Kylan1940/ServerTimeline",
+//     demo: null,
+//     status: "Live",
+//     featured: false,
+//   },
+//   {
+//     id: "proj-6",
+//     name: "Linock Bot",
+//     description: "A utility Discord bot built for server management and automation. Handles moderation workflows, custom commands, and routine tasks to reduce manual work for server administrators.",
+//     stack: ["JavaScript", "Discord.js"],
+//     github: "https://github.com/Kylan1940/LinockBot-Discord",
+//     demo: null,
+//     status: "In Progress",
+//     featured: false,
+//   },
+//   {
+//     id: "proj-11",
+//     name: "NusaAlert-Telegram-Bot",
+//     description: "A Telegram bot that fetches and delivers earthquake alerts from Indonesia's national meteorology agency (BMKG). Built to give communities quick access to critical local information without leaving Telegram.",
+//     stack: ["PHP"],
+//     github: "https://github.com/Kylan1940/WhitelistKick",
+//     demo: null,
+//     status: "Archived",
+//     featured: false,
+//   },
+//   {
+//     id: "proj-7",
+//     name: "PMMP-HealAndFeed",
+//     description: "Heal and Feed Command for PocketMine-MP",
+//     stack: ["PHP"],
+//     github: "https://github.com/Kylan1940/PMMP-HealAndFeed",
+//     demo: null,
+//     status: "Archived",
+//     featured: false,
+//   },
+//   {
+//     id: "proj-8",
+//     name: "PMMP-OnlineUI",
+//     description: "Check who are in the server with UI, for PocketMine-MP",
+//     stack: ["PHP"],
+//     github: "https://github.com/Kylan1940/OnlineUI",
+//     demo: null,
+//     status: "Archived",
+//     featured: false,
+//   },
+//   {
+//     id: "proj-9",
+//     name: "PMMP-HeadsOrTails",
+//     description: "Guess! Heads or Tails! for PocketMine-MP",
+//     stack: ["PHP"],
+//     github: "https://github.com/Kylan1940/HeadsOrTails",
+//     demo: null,
+//     status: "Archived",
+//     featured: false,
+//   },
+//   {
+//     id: "proj-10",
+//     name: "PMMP-WhitelistKick",
+//     description: "Kick all players when whitelist on, for PocketMine-MP",
+//     stack: ["PHP"],
+//     github: "https://github.com/Kylan1940/WhitelistKick",
+//     demo: null,
+//     status: "Archived",
+//     featured: false,
+//   },
+// ]
 
 export const contact = {
   intro: "I'm open to internship opportunities, freelance projects, and meaningful collaborations. Feel free to reach out.",
