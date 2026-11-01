@@ -5,6 +5,9 @@ export const siteConfig = {
   username: "Kylan1940"
 };
 
+export const certificatesDriveUrl =
+  "https://drive.google.com/drive/folders/1TvHX-KrtjjQnt3ESfL12i5VqaDiM4Lkp";
+
 export const about = {
   intro: [
     { label: "Name", value: "Valerian Kevin Casendra" },

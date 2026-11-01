@@ -931,6 +931,27 @@
     padding: 0;
 }
 
+.cert-footer-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+.cert-drive-link {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--accent);
+    text-decoration: none;
+    transition: opacity 0.2s ease;
+}
+
+.cert-drive-link:hover {
+    opacity: 0.7;
+    text-decoration: underline;
+}
+
 /* projects */
 .project-slider {
     position: relative;

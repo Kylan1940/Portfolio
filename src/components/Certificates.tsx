@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import type { Certificate, CertCategory, SortOrder } from "../lib/database.types";
 import { CERT_CATEGORIES } from "../lib/database.types";
+import { certificatesDriveUrl } from "../lib/data";
 
 type FilterCategory = "All" | CertCategory;
 
@@ -191,63 +192,98 @@ export function Certificates() {
     }
 
     return (
-        <section id="certificates" className="page-section">
-            <div className="section-inner">
-                <div className="cert-controls">
-                    <input type="text" value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Search by title, provider..." className="cert-input"/>
-                    <select value={provider} onChange={(event) => setProvider(event.target.value)} className="cert-select">
-                        {allProviders.map((item) => (
-                            <option key={item} value={item}>
-                                {item === "All" ? "All providers" : item}
-                            </option>
-                        ))}
-                    </select>
-                    <select value={sortOrder}  onChange={(event) => setSortOrder( event.target.value as SortOrder)} className="cert-select">
-                        {SORT_OPTIONS.map((option) => (
-                            <option key={option.value} value={option.value}>{option.label}</option>
-                        ))}
-                    </select>
-                    <div className="focus-tabs cert-category-tabs">
-                        {ALL_FILTER_CATEGORIES.map(
-                            (item) => {
-                                const count = categoryCounts[item] ?? 0;
-                                const isActive = category === item;
-                                return (
-                                    <button key={item} type="button" className={`focus-tab${isActive ? " active" : ""}`} onClick={() => setCategory(item)}>{item}
-                                        <span className="cert-category-count">{count}</span>
-                                    </button>
-                                );
-                            }
-                        )}
-                    </div>
-                </div>
-                {loading ? (
-                    <p className="cert-status">Loading certificates...</p>
-                ) : error ? (
-                    <div className="cert-status cert-status-error">
-                        <p>Failed to load certificates.</p>
-                        <span className="cert-status-detail">{error}</span>
-                    </div>
-                ) : filtered.length > 0 ? (
-                    <div className="cert-list">
-                        {filtered.map((certificate) => (
-                            <CertRow key={certificate.id} cert={certificate} />
-                        ))}
-                    </div>
-                ) : (
-                    <p className="cert-status">
-                        {hasActiveFilters ? "No certificates match your search or filter." : "No certificates found."}
-                    </p>
-                )}
-                <div className="cert-footer">
-                    <span className="cert-footer-count">
-                        {filtered.length === certificates.length ? `${certificates.length} certificates` : `${filtered.length} of ${certificates.length} certificates`}
-                    </span>
-                    {hasActiveFilters && (
-                        <button type="button" className="cert-clear" onClick={clearFilters}>Clear Filters</button>
-                    )}
-                </div>
+      <section id="certificates" className="page-section">
+        <div className="section-inner">
+          <div className="cert-controls">
+            <input
+              type="text"
+              value={search}
+              onChange={(event) => setSearch(event.target.value)}
+              placeholder="Search by title, provider..."
+              className="cert-input"
+            />
+            <select
+              value={provider}
+              onChange={(event) => setProvider(event.target.value)}
+              className="cert-select"
+            >
+              {allProviders.map((item) => (
+                <option key={item} value={item}>
+                  {item === "All" ? "All providers" : item}
+                </option>
+              ))}
+            </select>
+            <select
+              value={sortOrder}
+              onChange={(event) =>
+                setSortOrder(event.target.value as SortOrder)
+              }
+              className="cert-select"
+            >
+              {SORT_OPTIONS.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
+            <div className="focus-tabs cert-category-tabs">
+              {ALL_FILTER_CATEGORIES.map((item) => {
+                const count = categoryCounts[item] ?? 0;
+                const isActive = category === item;
+                return (
+                  <button
+                    key={item}
+                    type="button"
+                    className={`focus-tab${isActive ? " active" : ""}`}
+                    onClick={() => setCategory(item)}
+                  >
+                    {item}
+                    <span className="cert-category-count">{count}</span>
+                  </button>
+                );
+              })}
             </div>
-        </section>
+          </div>
+          {loading ? (
+            <p className="cert-status">Loading certificates...</p>
+          ) : error ? (
+            <div className="cert-status cert-status-error">
+              <p>Failed to load certificates.</p>
+              <span className="cert-status-detail">{error}</span>
+            </div>
+          ) : filtered.length > 0 ? (
+            <div className="cert-list">
+              {filtered.map((certificate) => (
+                <CertRow key={certificate.id} cert={certificate} />
+              ))}
+            </div>
+          ) : (
+            <p className="cert-status">
+              {hasActiveFilters
+                ? "No certificates match your search or filter."
+                : "No certificates found."}
+            </p>
+          )}
+          <div className="cert-footer-actions">
+            {hasActiveFilters && (
+              <button
+                type="button"
+                className="cert-clear"
+                onClick={clearFilters}
+              >
+                Clear Filters
+              </button>
+            )}
+            {/* <a
+              href={certificatesDriveUrl}
+              target="_blank"
+              rel="noreferrer noopener"
+              className="cert-drive-link"
+            >
+              View on Google Drive ↗
+            </a> */}
+          </div>
+        </div>
+      </section>
     );
 }
