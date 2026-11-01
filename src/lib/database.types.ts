@@ -95,6 +95,7 @@ export type ProjectStatus = Database["public"]["Tables"]["projects"]["Row"]["sta
 
 export const CERT_CATEGORIES = [
     "Mini Course",
+    "Training",
     "Workshop",
     "Webinar",
 ] as const;
