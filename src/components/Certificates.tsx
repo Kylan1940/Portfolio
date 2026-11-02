@@ -265,6 +265,14 @@ export function Certificates() {
             </p>
           )}
           <div className="cert-footer-actions">
+            <a
+              href={certificatesDriveUrl}
+              target="_blank"
+              rel="noreferrer noopener"
+              className="cert-drive-link"
+            >
+              View all on Google Drive ↗
+            </a>
             {hasActiveFilters && (
               <button
                 type="button"
@@ -274,14 +282,6 @@ export function Certificates() {
                 Clear Filters
               </button>
             )}
-            {/* <a
-              href={certificatesDriveUrl}
-              target="_blank"
-              rel="noreferrer noopener"
-              className="cert-drive-link"
-            >
-              View on Google Drive ↗
-            </a> */}
           </div>
         </div>
       </section>
