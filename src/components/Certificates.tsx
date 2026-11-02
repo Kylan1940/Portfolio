@@ -271,7 +271,7 @@ export function Certificates() {
               rel="noreferrer noopener"
               className="cert-drive-link"
             >
-              View all on Google Drive ↗
+              View on Google Drive ↗
             </a>
             {hasActiveFilters && (
               <button
