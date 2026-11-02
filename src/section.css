@@ -932,11 +932,16 @@
 }
 
 .cert-footer-actions {
+    flex: 1;
     display: flex;
     align-items: center;
-    justify-content: flex-end;
+    justify-content: space-between;
     flex-wrap: wrap;
     gap: 16px;
+}
+
+.cert-drive-link:only-child {
+    margin-left: auto;
 }
 
 .cert-drive-link {
