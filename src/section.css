@@ -279,28 +279,67 @@
 
 .hello-world {
     display: inline-block;
-    font-family: var(--heading);
-    font-weight: 700;
-    font-size: 44px;
-    line-height: 1.2;
-    letter-spacing: -0.28px;
-    margin: 0 0 20px;
-    background: linear-gradient(100deg, var(--text-h) 35%, var(--accent) 50%, var(--text-h) 65%);
-    background-size: 250% 100%;
+    font-family: 'Great Vibes', var(--heading), cursive;
+    font-weight: 400;
+    font-size: clamp(40px, 8vw, 60px);
+    line-height: 1.25;
+    letter-spacing: 0;
+    margin: 0 0 12px;
+    color: var(--text-h);
+    animation: hello-rise 0.7s ease-out both;
+}
+
+.hello-accent {
+    display: inline-block;
+    padding: 0.05em 0.14em 0.14em 0.04em;
+    background: linear-gradient(
+        100deg,
+        var(--accent) 0%,
+        color-mix(in srgb, var(--accent) 40%, var(--text-h)) 50%,
+        var(--accent) 100%
+    );
+    background-size: 200% 100%;
     background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     color: transparent;
-    animation: shimmer 3.5s ease-in-out infinite;
+    filter: drop-shadow(0 0 18px color-mix(in srgb, var(--accent) 35%, transparent));
+    animation: hello-shimmer 4s linear infinite;
 }
 
-@keyframes shimmer {
-    0% {
-        background-position: 200% 0;
-    }
+/* blinking terminal cursor, matches the "// about" label */
+.hello-accent::after {
+    content: '';
+    display: inline-block;
+    width: 0.05em;
+    height: 0.7em;
+    margin-left: 0.2em;
+    border-radius: 1px;
+    background: var(--accent);
+    -webkit-text-fill-color: initial;
+    animation: hello-caret 1.1s steps(1) infinite;
+}
 
-    100% {
-        background-position: -200% 0;
+@keyframes hello-shimmer {
+    from { background-position: 0% 0; }
+    to { background-position: 200% 0; }
+}
+
+@keyframes hello-caret {
+    0%, 49% { opacity: 1; }
+    50%, 100% { opacity: 0; }
+}
+
+@keyframes hello-rise {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .hello-world,
+    .hello-accent,
+    .hello-accent::after {
+        animation: none;
     }
 }
 

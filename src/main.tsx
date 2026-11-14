@@ -8,9 +8,10 @@ import { Experience } from './components/Experience.tsx'
 import { Projects } from './components/Projects.tsx'
 import { Certificates } from './components/Certificates.tsx'
 import { Contact } from './components/Contact.tsx'
+import { Header } from './components/Header.tsx'
 import './index.css'
 import './section.css'
-import { Header } from './components/Header.tsx'
+import '@fontsource/great-vibes'
 
 createRoot(document.getElementById('root')!).render(
   <main>

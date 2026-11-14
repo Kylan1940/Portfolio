@@ -10,7 +10,7 @@ export function About() {
     <section id="about" className="page-section">
         <div className="section-inner">
 
-            <p className="hello-world">Hello, World!</p>
+            <p className="hello-world">Hello, <span className="hello-accent">World!</span></p>
 
             <div className="space-y-4">
                 {about.paragraphs.map((p, i) => (
