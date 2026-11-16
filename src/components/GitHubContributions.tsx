@@ -1,4 +1,7 @@
-import { useEffect, useState } from "react";
+import { useMemo, useState } from "react";
+import { siteConfig } from "../lib/data";
+import { useApi } from "../lib/useApi";
+import { StateMessage } from "./SectionLabel";
 
 interface ContributionDay {
     date: string;
@@ -19,156 +22,99 @@ interface ContributionData {
 
 const START_YEAR = 2020;
 const CURRENT_YEAR = new Date().getFullYear();
+const YEARS = Array.from({ length: CURRENT_YEAR - START_YEAR + 1 }, (_, i) => CURRENT_YEAR - i);
+const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+function parseContributions(json: unknown): ContributionData {
+    const data = json as Partial<ContributionData> | null;
+    if (!data || !Array.isArray(data.weeks) || typeof data.totalContributions !== "number") {
+        throw new Error("Unexpected response from the contributions API");
+    }
+    return data as ContributionData;
+}
+
+function getLevel(count: number) {
+    if (count === 0) return 0;
+    if (count <= 2) return 1;
+    if (count <= 5) return 2;
+    if (count <= 9) return 3;
+    return 4;
+}
+
+function describe(day: ContributionDay) {
+    const n = day.contributionCount;
+    return `${n} contribution${n === 1 ? "" : "s"} on ${day.date}`;
+}
 
 export function ContributionGraph() {
     const [year, setYear] = useState(CURRENT_YEAR);
-    const [data, setData] = useState<ContributionData | null>(null);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(false);
+    const { data, loading, error, reload } = useApi(`/api/github-contributions?year=${year}`, parseContributions);
 
-    useEffect(() => {
-        let cancelled = false;
-
-        async function fetchContributions() {
-            setLoading(true);
-            setError(false);
-
-            try {
-                const response = await fetch(
-                    `/api/github-contributions?year=${year}`
-                );
-
-                if (!response.ok) {
-                    throw new Error("Failed to fetch contributions");
-                }
-
-                const result = (await response.json()) as ContributionData;
-
-                if (!cancelled) {
-                    setData(result);
-                }
-            } catch {
-                if (!cancelled) {
-                    setError(true);
-                    setData(null);
-                }
-            } finally {
-                if (!cancelled) {
-                    setLoading(false);
-                }
-            }
-        }
-
-        fetchContributions();
-
-        return () => {
-            cancelled = true;
-        };
-    }, [year]);
-
-    function getLevel(count: number) {
-        if (count === 0) return 0;
-        if (count <= 2) return 1;
-        if (count <= 5) return 2;
-        if (count <= 9) return 3;
-        return 4;
-    }
-
-    const years = Array.from(
-        { length: CURRENT_YEAR - START_YEAR + 1 },
-        (_, index) => CURRENT_YEAR - index
-    );
+    // Month labels: put a label above the first week that starts a new month.
+    const monthLabels = useMemo(() => {
+        if (!data) return [];
+        let last = -1;
+        return data.weeks.map((week) => {
+            const first = week.contributionDays[0];
+            if (!first) return "";
+            const month = Number(first.date.slice(5, 7)) - 1;
+            if (month === last) return "";
+            last = month;
+            return MONTHS[month];
+        });
+    }, [data]);
 
     return (
-        <div className="contribution-block">
-            <div className="contribution-header">
+        <div className="contrib" aria-busy={loading}>
+            <div className="contrib-head">
                 <div>
-                    <span className="contribution-label">
-                        GitHub Activity
-                    </span>
-
-                    <p className="contribution-title">
-                        @{data?.username ?? "Kylan1940"}
+                    <p className="eyebrow">GitHub activity</p>
+                    <p className="contrib-user">
+                        <a href={`https://github.com/${siteConfig.username}`} target="_blank" rel="noreferrer noopener">
+                            @{data?.username ?? siteConfig.username}
+                        </a>
                     </p>
                 </div>
 
-                <div
-                    className="contribution-years"
-                    role="tablist"
-                    aria-label="Contribution year"
-                >
-                    {years.map((item) => (
-                        <button
-                            key={item}
-                            type="button"
-                            role="tab"
-                            aria-selected={year === item}
-                            className={`contribution-year${
-                                year === item ? " active" : ""
-                            }`}
-                            onClick={() => setYear(item)}
-                        >
+                <div className="chips" role="group" aria-label="Contribution year">
+                    {YEARS.map((item) => (
+                        <button key={item} type="button" className={`chip${year === item ? " is-active" : ""}`} aria-pressed={year === item} onClick={() => setYear(item)}>
                             {item}
                         </button>
                     ))}
                 </div>
             </div>
 
-            {loading && (
-                <div className="contribution-state">
-                    Loading contributions...
-                </div>
-            )}
+            {loading && <div className="contrib-skeleton" role="status" aria-label="Loading GitHub contributions" />}
 
-            {error && (
-                <div className="contribution-state">
-                    Failed to load GitHub contributions.
-                </div>
+            {!loading && error && (
+                <StateMessage tone="error" title="Couldn't load GitHub contributions." detail={error} onRetry={reload} />
             )}
 
             {!loading && !error && data && (
                 <>
-                    <div className="contribution-summary">
-                        <span>
-                            {data.totalContributions.toLocaleString()}{" "}
-                            contributions in {data.year}
-                        </span>
-                    </div>
+                    <p className="contrib-total">
+                        <strong>{data.totalContributions.toLocaleString()}</strong> contributions in {data.year}
+                    </p>
 
-                    <div className="contribution-scroll">
-                        <div className="contribution-graph">
-                            {data.weeks.map((week, weekIndex) => (
-                                <div
-                                    key={weekIndex}
-                                    className="contribution-week"
-                                >
+                    <div className="contrib-scroll" tabIndex={0} role="region" aria-label={`Contribution calendar for ${data.year}`}>
+                        <div className="contrib-grid">
+                            {data.weeks.map((week, w) => (
+                                <div key={w} className="contrib-week">
+                                    <span className="contrib-month" aria-hidden="true">{monthLabels[w]}</span>
                                     {week.contributionDays.map((day) => (
-                                        <div
-                                            key={day.date}
-                                            className={`contribution-cell level-${getLevel(
-                                                day.contributionCount
-                                            )}`}
-                                            title={`${day.contributionCount} contribution${
-                                                day.contributionCount === 1
-                                                    ? ""
-                                                    : "s"
-                                            } on ${day.date}`}
-                                        />
+                                        <span key={day.date} className={`cell level-${getLevel(day.contributionCount)}`} title={describe(day)} aria-label={describe(day)} role="img" style={{ gridRow: day.weekday + 2 }} />
                                     ))}
                                 </div>
                             ))}
                         </div>
                     </div>
 
-                    <div className="contribution-legend">
+                    <div className="contrib-legend" aria-hidden="true">
                         <span>Less</span>
-
-                        <span className="legend-cell level-0" />
-                        <span className="legend-cell level-1" />
-                        <span className="legend-cell level-2" />
-                        <span className="legend-cell level-3" />
-                        <span className="legend-cell level-4" />
-
+                        {[0, 1, 2, 3, 4].map((l) => (
+                            <span key={l} className={`cell level-${l}`} />
+                        ))}
                         <span>More</span>
                     </div>
                 </>

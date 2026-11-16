@@ -1,10 +1,10 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useMemo, useState } from "react";
 import type { Project, ProjectStatus } from "../lib/database.types";
+import { useApi } from "../lib/useApi";
+import { Reveal } from "./Reveal";
+import { SectionHeading, StateMessage } from "./SectionLabel";
 
-const SLIDE_DURATION = 5000;
-const FIRST_ADVANCE_DELAY = 500;
-const PEEK_GAP = 20;
-const SWIPE_THRESHOLD = 40;
+const STATUS_ORDER: ProjectStatus[] = ["Live", "In Progress", "Planned", "Archived"];
 
 const STATUS_CLASS: Record<ProjectStatus, string> = {
     Live: "is-live",
@@ -13,237 +13,106 @@ const STATUS_CLASS: Record<ProjectStatus, string> = {
     Archived: "is-archived",
 };
 
-function ProjectCard({ project }: { project: Project }) {
-    return (
-        <div className="project-card">
-            <div className="project-card-header">
-                <div>
-                    <h3>{project.name}</h3>
-                </div>
-                {project.sort_order === 1 && (
-                        <span className="project-featured-badge">Featured</span>
-                )}
-            </div>
-            <p className="project-card-desc">{project.description}</p>
-            <div className="project-card-links">
-                {project.github && (
-                    <a href={project.github} target="_blank" rel="noreferrer noopener">Github ↗</a>
-                )}
-                {project.demo && (
-                    <a href={project.demo} target="_blank" rel="noreferrer noopener">Demo ↗</a>
-                )}
-            </div>
-            <div className="project-card-footer">
-                <div className="project-card-stack">
-                    {project.stack.map((technology) => (
-                        <span key={technology} className="tag-pill">{technology}</span>
-                    ))}
-                </div>
-                <span className={`project-status ${ STATUS_CLASS[project.status]}`}>{project.status}</span>
-            </div>
-        </div>
-    );
+type StatusFilter = "All" | ProjectStatus;
+
+function parseProjects(json: unknown): Project[] {
+    const projects = (json as { projects?: unknown } | null)?.projects;
+    if (!Array.isArray(projects)) {
+        throw new Error("Unexpected response from the projects API");
+    }
+    return projects as Project[];
 }
 
-function circularOffset(
-    slideIndex: number,
-    currentIndex: number,
-    total: number
-) {
-    let diff = slideIndex - currentIndex;
-    if (diff > total / 2) {
-        diff -= total;
-    }
-    if (diff < -total / 2) {
-        diff += total;
-    }
-    return diff;
+function ProjectCard({ project, featured, delay }: { project: Project; featured: boolean; delay: number }) {
+    return (
+        <Reveal as="article" className={`project${featured ? " is-featured" : ""}`} delay={delay}>
+            <div className="project-top">
+                <span className={`status ${STATUS_CLASS[project.status]}`}>{project.status}</span>
+                {featured && <span className="badge">Featured</span>}
+            </div>
+            <h3>{project.name}</h3>
+            <p className="project-desc">{project.description}</p>
+            <ul className="tags" aria-label={`${project.name} tech stack`}>
+                {project.stack.map((tech) => (
+                    <li key={tech} className="tag">{tech}</li>
+                ))}
+            </ul>
+            {(project.github || project.demo) && (
+                <div className="project-links">
+                    {project.github && (
+                        <a href={project.github} target="_blank" rel="noreferrer noopener" aria-label={`${project.name} on GitHub (opens in a new tab)`}>
+                            GitHub <span aria-hidden="true">↗</span>
+                        </a>
+                    )}
+                    {project.demo && (
+                        <a href={project.demo} target="_blank" rel="noreferrer noopener" aria-label={`${project.name} live demo (opens in a new tab)`}>
+                            Demo <span aria-hidden="true">↗</span>
+                        </a>
+                    )}
+                </div>
+            )}
+        </Reveal>
+    );
 }
 
 export function Projects() {
-    const [projects, setProjects] = useState<Project[]>([]);
-    const [loading, setLoading] = useState(true);
+    const { data, loading, error, reload } = useApi("/api/projects", parseProjects);
+    const [status, setStatus] = useState<StatusFilter>("All");
 
-    const [index, setIndex] = useState(0);
-    const [paused, setPaused] = useState(false);
-    const [inView, setInView] = useState(false);
-    const [readyToAdvance, setReadyToAdvance] = useState(false);
+    const projects = useMemo(() => data ?? [], [data]);
 
-    const sliderRef = useRef<HTMLDivElement | null>(null);
-    const enterTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+    // Statuses that actually exist in the data, in a sensible order, with counts.
+    const filters = useMemo(() => {
+        const counts = new Map<ProjectStatus, number>();
+        for (const p of projects) counts.set(p.status, (counts.get(p.status) ?? 0) + 1);
+        return STATUS_ORDER.filter((s) => counts.has(s)).map((s) => ({ status: s, count: counts.get(s) ?? 0 }));
+    }, [projects]);
 
-    useEffect(() => {
-        let cancelled = false;
-
-        async function loadProjects() {
-            try {
-                const response = await fetch("/api/projects");
-
-                if (!response.ok) {
-                    throw new Error("Failed to fetch projects");
-                }
-
-                const result = (await response.json()) as {
-                    projects: Project[];
-                };
-
-                if (!cancelled) {
-                    setProjects(result.projects);
-                }
-            } catch (error) {
-                console.error("Projects loading error:", error);
-                if (!cancelled) {
-                    setProjects([]);
-                }
-            } finally {
-                if (!cancelled) {
-                    setLoading(false);
-                }
-            }
-        }
-
-        loadProjects();
-        return () => {
-            cancelled = true;
-        };
-    }, []);
-
-    const total = projects.length;
-
-    const goTo = useCallback(
-        (next: number) => {
-            if (total === 0) return;
-            setIndex(((next % total) + total) % total);
-        },
-        [total]
-    );
-
-    const goNext = useCallback(() => {
-        goTo(index + 1);
-    }, [goTo, index]);
-
-    const goPrev = useCallback(() => {
-        goTo(index - 1);
-    }, [goTo, index]);
-
-    const touchStartX = useRef<number | null>(null);
-    const touchDeltaX = useRef(0);
-
-    const handleTouchStart = (event: React.TouchEvent) => {
-        touchStartX.current = event.touches[0].clientX;
-        touchDeltaX.current = 0;
-        setPaused(true);
-    };
-
-    const handleTouchMove = ( event: React.TouchEvent) => {
-        if (touchStartX.current === null) return;
-        touchDeltaX.current = event.touches[0].clientX - touchStartX.current;
-    };
-    const handleTouchEnd = () => {
-        if (Math.abs(touchDeltaX.current) > SWIPE_THRESHOLD) {
-            if (touchDeltaX.current < 0) {
-                goNext();
-            } else {
-                goPrev();
-            }
-        }
-        touchStartX.current = null;
-        touchDeltaX.current = 0;
-        setPaused(false);
-    };
-
-    useEffect(() => {
-        const element = sliderRef.current;
-        if (!element) return;
-        const observer = new IntersectionObserver(
-            ([entry]) => {
-                if (enterTimeoutRef.current) {
-                    clearTimeout(enterTimeoutRef.current);
-                }
-                if (entry.isIntersecting) {
-                    setInView(true);
-                    setIndex(0);
-                    setReadyToAdvance(false);
-                    enterTimeoutRef.current = setTimeout(() => {setReadyToAdvance(true)}, FIRST_ADVANCE_DELAY);
-                } else {
-                    setInView(false);
-                    setReadyToAdvance(false);
-                }
-            },
-            { threshold: 0.4 }
-        );
-        observer.observe(element);
-        return () => {
-            observer.disconnect();
-            if (enterTimeoutRef.current) {
-                clearTimeout(enterTimeoutRef.current);
-            }
-        };
-    }, []);
-
-    useEffect(() => {
-        if ( paused || !inView || !readyToAdvance || total <= 1 ) {
-            return;
-        }
-        const timer = setInterval(() => {
-            setIndex((previous) => (previous + 1) % total);
-        }, SLIDE_DURATION);
-
-        return () => clearInterval(timer);
-    }, [
-        paused,
-        inView,
-        readyToAdvance,
-        total,
-    ]);
+    // API order (sort_order, then newest) is preserved; the filter only narrows it.
+    const visible = useMemo(() => (status === "All" ? projects : projects.filter((p) => p.status === status)), [projects, status]);
 
     return (
-        <section id="projects" className="page-section" ref={sliderRef}>
-            <div className="section-inner">
-                <p className="text-neutral-400 text-base leading-relaxed max-w-md mb-8">
-                    A mix of things I've shipped, maintained, or am still actively building. This list keeps growing as I build more.
-                </p>
-                {loading ? (
-                    <p className="cert-status">Loading projects...</p>
-                ) : total === 0 ? (
-                    <p className="cert-status">No projects found.</p>
-                ) : (
+        <section id="projects" className="section section-tint" aria-labelledby="projects-title">
+            <div className="container">
+                <SectionHeading
+                    id="projects"
+                    index="04"
+                    title="Projects"
+                    lead="A mix of things I've shipped, maintained, or am still actively building. This list keeps growing as I build more."
+                />
+
+                {loading && (
+                    <div className="project-grid" role="status" aria-label="Loading projects">
+                        {[0, 1, 2].map((i) => (
+                            <div key={i} className="project skeleton" aria-hidden="true" />
+                        ))}
+                    </div>
+                )}
+
+                {!loading && error && <StateMessage tone="error" title="Couldn't load projects." detail={error} onRetry={reload} />}
+
+                {!loading && !error && projects.length === 0 && <StateMessage title="No projects found." detail="Check back soon — new work is on the way." />}
+
+                {!loading && !error && projects.length > 0 && (
                     <>
-                        <div className="project-slider" onMouseEnter={() => setPaused(true)} onMouseLeave={() => setPaused(false)} onTouchStart={handleTouchStart} onTouchMove={handleTouchMove} onTouchEnd={handleTouchEnd}>
-                            <button type="button" className="slider-arrow slider-arrow-left" onClick={goPrev} aria-label="Previous project">
-                                <svg viewBox="0 0 20 20" fill="none" aria-hidden="true">
-                                    <path d="M12.5 4.5 6.5 10l6 5.5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
-                                </svg>
-                            </button>
-                            <div className="project-viewport">
-                                {projects.map((project, i) => {
-                                    const offset = circularOffset( i, index, total);
-                                    const distance = Math.abs(offset);
-                                    const isCenter = distance === 0;
-                                    const visible = distance <= 1;
-                                    return (
-                                        <div key={project.id} className={`project-slide-abs${isCenter ? " is-center" : ""}`}
-                                            style={{transform: `translateX(calc(${offset * 100}% + ${offset * PEEK_GAP}px))`,
-                                                opacity: visible ? isCenter ? 1 : 0.4 : 0,
-                                                filter: isCenter ? "none" : "blur(3px)",
-                                                zIndex: 10 - distance,
-                                                cursor: isCenter ? "default" : "pointer",
-                                            }}
-                                            onClick={!isCenter ? offset < 0 ? goPrev: goNext : undefined}
-                                            aria-hidden={!isCenter}
-                                        >
-                                            <ProjectCard project={project}/>
-                                        </div>
-                                    );
-                                })}
+                        {filters.length > 1 && (
+                            <div className="chips project-filters" role="group" aria-label="Filter projects by status">
+                                <button type="button" className={`chip${status === "All" ? " is-active" : ""}`} aria-pressed={status === "All"} onClick={() => setStatus("All")}>
+                                    All <span className="chip-count">{projects.length}</span>
+                                </button>
+                                {filters.map((f) => (
+                                    <button key={f.status} type="button" className={`chip${status === f.status ? " is-active" : ""}`} aria-pressed={status === f.status} onClick={() => setStatus(f.status)}>
+                                        {f.status} <span className="chip-count">{f.count}</span>
+                                    </button>
+                                ))}
                             </div>
-                            <button type="button" className="slider-arrow slider-arrow-right" onClick={goNext} aria-label="Next project">
-                                <svg viewBox="0 0 20 20" fill="none" aria-hidden="true">
-                                    <path d="M7.5 4.5 13.5 10l-6 5.5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
-                                </svg>
-                            </button>
+                        )}
+
+                        <div className="project-grid">
+                            {visible.map((project, i) => (
+                                <ProjectCard key={project.id} project={project} featured={project.sort_order === 1} delay={Math.min(i, 4)} />
+                            ))}
                         </div>
-                        <span className="slider-counter">{index + 1} / {total}</span>
                     </>
                 )}
             </div>

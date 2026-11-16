@@ -3,6 +3,16 @@ export const siteConfig = {
   username: "Kylan1940"
 };
 
+/** Section navigation, in page order. */
+export const NAV_LINKS = [
+    { label: "About", id: "about" },
+    { label: "Experience", id: "experience" },
+    { label: "Skills", id: "skills" },
+    { label: "Projects", id: "projects" },
+    { label: "Certificates", id: "certificates" },
+    { label: "Contact", id: "contact" },
+] as const;
+
 export const certificatesDriveUrl =
   "https://drive.google.com/drive/folders/1TvHX-KrtjjQnt3ESfL12i5VqaDiM4Lkp";
 
@@ -24,7 +34,7 @@ export const about = {
     },
     {
       language: "TypeScript",
-      description: "Writing more structured, type-safe code and using TypeScript accross web applications and backend projects."
+      description: "Writing more structured, type-safe code and using TypeScript across web applications and backend projects."
     },
     {
       language: "Java",
