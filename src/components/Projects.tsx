@@ -15,6 +15,8 @@ const STATUS_CLASS: Record<ProjectStatus, string> = {
 
 type StatusFilter = "All" | ProjectStatus;
 
+const PAGE_SIZE = 6;
+
 function parseProjects(json: unknown): Project[] {
     const projects = (json as { projects?: unknown } | null)?.projects;
     if (!Array.isArray(projects)) {
@@ -58,6 +60,9 @@ function ProjectCard({ project, featured, delay }: { project: Project; featured:
 export function Projects() {
     const { data, loading, error, reload } = useApi("/api/projects", parseProjects);
     const [status, setStatus] = useState<StatusFilter>("All");
+    // How many cards are shown; it resets to PAGE_SIZE whenever the filter changes.
+    const [expanded, setExpanded] = useState({ filter: "All" as StatusFilter, count: PAGE_SIZE });
+    const limit = expanded.filter === status ? expanded.count : PAGE_SIZE;
 
     const projects = useMemo(() => data ?? [], [data]);
 
@@ -109,10 +114,35 @@ export function Projects() {
                         )}
 
                         <div className="project-grid">
-                            {visible.map((project, i) => (
-                                <ProjectCard key={project.id} project={project} featured={project.sort_order === 1} delay={Math.min(i, 4)} />
+                            {visible.slice(0, limit).map((project, i) => (
+                                <ProjectCard key={project.id} project={project} featured={project.sort_order === 1} delay={Math.min(i % PAGE_SIZE, 4)} />
                             ))}
                         </div>
+
+                        {visible.length > PAGE_SIZE && (
+                            <div className="list-more">
+                                <p aria-live="polite">
+                                    Showing {Math.min(limit, visible.length)} of {visible.length}
+                                </p>
+                                {limit < visible.length && (
+                                    <button type="button" className="btn btn-ghost" onClick={() => setExpanded({ filter: status, count: limit + PAGE_SIZE })}>
+                                        Show more
+                                    </button>
+                                )}
+                                {limit > PAGE_SIZE && (
+                                    <button
+                                        type="button"
+                                        className="btn btn-text"
+                                        onClick={() => {
+                                            setExpanded({ filter: status, count: PAGE_SIZE });
+                                            document.getElementById("projects")?.scrollIntoView();
+                                        }}
+                                    >
+                                        Show less
+                                    </button>
+                                )}
+                            </div>
+                        )}
                     </>
                 )}
             </div>

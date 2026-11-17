@@ -52,6 +52,7 @@
 }
 
 html {
+  touch-action: manipulation;
   scroll-padding-top: calc(var(--header-h) + 12px);
   -webkit-text-size-adjust: 100%;
 }

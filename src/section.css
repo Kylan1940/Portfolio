@@ -239,6 +239,11 @@
   .header-links { display: none; }
   .header-toggle { display: inline-flex; }
   .header-mobile {
+    /* out of flow: otherwise the (invisible) panel stretches the fixed header over the page and swallows taps */
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
     display: grid;
     gap: 4px;
     padding: 12px clamp(20px, 4vw, 40px) 20px;
@@ -641,6 +646,17 @@
 @media (min-width: 760px) {
   .project.is-featured { grid-column: span 2; }
 }
+
+/* "Show more / Show less" row shared by Projects and Certificates */
+.list-more {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 12px 16px;
+  margin-top: 32px;
+}
+.list-more p { color: var(--muted); font-size: 0.92rem; width: 100%; text-align: center; }
 
 /* ==================================================================
    Certificates

@@ -8,6 +8,8 @@ import { SectionHeading, StateMessage } from "./SectionLabel";
 
 type FilterCategory = "All" | CertCategory;
 
+const PAGE_SIZE = 8;
+
 const ALL_FILTER_CATEGORIES: FilterCategory[] = ["All", ...CERT_CATEGORIES];
 
 const SORT_OPTIONS: { value: SortOrder; label: string }[] = [
@@ -85,6 +87,11 @@ export function Certificates() {
     const [sortOrder, setSortOrder] = useState<SortOrder>("newest");
 
     const certificates = useMemo(() => data ?? [], [data]);
+
+    // How many rows are shown; it resets to PAGE_SIZE whenever search, filters or sorting change.
+    const signature = `${search}|${category}|${provider}|${sortOrder}`;
+    const [expanded, setExpanded] = useState({ signature: "", count: PAGE_SIZE });
+    const limit = expanded.signature === signature ? expanded.count : PAGE_SIZE;
 
     const allProviders = useMemo(() => ["All", ...Array.from(new Set(certificates.map((c) => c.provider))).sort()], [certificates]);
 
@@ -172,13 +179,35 @@ export function Certificates() {
                 {!loading && !error && filtered.length > 0 && (
                     <>
                         <p className="cert-count" aria-live="polite">
-                            Showing {filtered.length} of {certificates.length}
+                            Showing {Math.min(limit, filtered.length)} of {filtered.length}
+                            {filtered.length !== certificates.length && ` (${certificates.length} total)`}
                         </p>
                         <ul className="cert-list">
-                            {filtered.map((c) => (
+                            {filtered.slice(0, limit).map((c) => (
                                 <CertRow key={c.id} cert={c} />
                             ))}
                         </ul>
+                        {filtered.length > PAGE_SIZE && (
+                            <div className="list-more">
+                                {limit < filtered.length && (
+                                    <button type="button" className="btn btn-ghost" onClick={() => setExpanded({ signature, count: limit + PAGE_SIZE })}>
+                                        Show more
+                                    </button>
+                                )}
+                                {limit > PAGE_SIZE && (
+                                    <button
+                                        type="button"
+                                        className="btn btn-text"
+                                        onClick={() => {
+                                            setExpanded({ signature, count: PAGE_SIZE });
+                                            document.getElementById("certificates")?.scrollIntoView();
+                                        }}
+                                    >
+                                        Show less
+                                    </button>
+                                )}
+                            </div>
+                        )}
                     </>
                 )}
 
